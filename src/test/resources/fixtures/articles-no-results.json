@@ -1,0 +1,15 @@
+{
+  "version": "6.9",
+  "hitCount": 0,
+  "request": {
+    "queryString": "GRANT_ID:\"FS/00/00000\"",
+    "resultType": "core",
+    "cursorMark": "*",
+    "pageSize": 3,
+    "sort": "",
+    "synonym": false
+  },
+  "resultList": {
+    "result": []
+  }
+}

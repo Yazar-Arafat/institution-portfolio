@@ -1,0 +1,119 @@
+{
+  "version": "6.9",
+  "hitCount": 83,
+  "request": {
+    "queryString": "GRANT_ID:\"12345\"",
+    "resultType": "core",
+    "cursorMark": "*",
+    "pageSize": 3,
+    "sort": "",
+    "synonym": false
+  },
+  "resultList": {
+    "result": [
+      {
+        "id": "PPR1162769",
+        "source": "PPR",
+        "doi": "10.12688/verixiv.362.3",
+        "title": "Child Development and Family Human Capital Investment Decisions in Nigeria: a Study of Selected States in the Six Geo-Political Zones",
+        "pubYear": "2026",
+        "isOpenAccess": "N",
+        "bookOrReportDetails": {
+          "publisher": "VeriXiv"
+        },
+        "grantsList": {
+          "grant": [
+            {
+              "agency": "Gates Foundation",
+              "grantId": "INV-002741",
+              "orderIn": 0
+            },
+            {
+              "agency": "Gates Foundation",
+              "grantId": "12345",
+              "orderIn": 0
+            },
+            {
+              "agency": "African Economic Research Consortium",
+              "grantId": "R122518",
+              "orderIn": 0
+            }
+          ]
+        }
+      },
+      {
+        "id": "41353217",
+        "source": "MED",
+        "pmid": "41353217",
+        "pmcid": "PMC12783686",
+        "doi": "10.1038/s41467-025-66984-2",
+        "title": "β-catenin condensation facilitates clustering of the cadherin/catenin complex and formation of nascent cell-cell junctions.",
+        "pubYear": "2025",
+        "isOpenAccess": "Y",
+        "journalInfo": {
+          "journal": {
+            "title": "Nature communications"
+          }
+        },
+        "grantsList": {
+          "grant": [
+            {
+              "agency": "KWF Kankerbestrijding",
+              "grantId": "12345",
+              "orderIn": 0
+            },
+            {
+              "agency": "Dutch Research Council (NWO)",
+              "grantId": "184.034.014",
+              "orderIn": 0
+            },
+            {
+              "agency": "Dutch Research Council (NWO)",
+              "grantId": "016.Vidi.189.166",
+              "orderIn": 0
+            },
+            {
+              "agency": "Dutch Research Council (NWO)",
+              "grantId": "024.001.028",
+              "orderIn": 0
+            },
+            {
+              "agency": "KWF Kankerbestrijding (Dutch Cancer Society)",
+              "grantId": "12345",
+              "orderIn": 0
+            },
+            {
+              "agency": "Dutch Research Council (NWO)",
+              "grantId": "2019.022",
+              "orderIn": 0
+            }
+          ]
+        }
+      },
+      {
+        "id": "41228889",
+        "source": "MED",
+        "pmid": "41228889",
+        "pmcid": "PMC12610594",
+        "doi": "10.3390/s25216665",
+        "title": "InertialMov: Machine Learning Test Based on Inertial Sensors to Predict Mobility Impairment in Low Back Pain Patients.",
+        "pubYear": "2025",
+        "isOpenAccess": "Y",
+        "journalInfo": {
+          "journal": {
+            "title": "Sensors (Basel, Switzerland)"
+          }
+        },
+        "grantsList": {
+          "grant": [
+            {
+              "agency": "Universidad Yachay Tech",
+              "grantId": "12345",
+              "orderIn": 0
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "version": "6.9",
+  "hitCount": 22,
+  "request": {
+    "queryString": "GRANT_ID:\"217100/Z/19/Z\"",
+    "resultType": "core",
+    "cursorMark": "*",
+    "pageSize": 3,
+    "sort": "",
+    "synonym": false
+  },
+  "resultList": {
+    "result": [
+      {
+        "id": "42791267",
+        "source": "MED",
+        "pmid": "42791267",
+        "pmcid": "PMC13614940",
+        "doi": "10.1038/s42003-026-11011-3",
+        "title": "Actin conformation dynamics precede force generation in cytotoxic T lymphocytes.",
+        "pubYear": "2026",
+        "isOpenAccess": "Y",
+        "journalInfo": {
+          "journal": {
+            "title": "Communications biology"
+          }
+        },
+        "grantsList": {
+          "grant": [
+            {
+              "agency": "Wellcome Trust",
+              "grantId": "217100/Z/19/Z",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "grantId": "215899/Z/19/Z",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "acronym": "WT_",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "grantId": "102163/B/13/Z",
+              "orderIn": 0
+            }
+          ]
+        }
+      },
+      {
+        "id": "PPR1076173",
+        "source": "PPR",
+        "doi": "10.21203/rs.3.rs-6674799/v1",
+        "title": "Actin conformation dynamics precede force generation in cytotoxic T lymphocytes",
+        "pubYear": "2025",
+        "isOpenAccess": "Y",
+        "bookOrReportDetails": {
+          "publisher": "Research Square"
+        },
+        "grantsList": {
+          "grant": [
+            {
+              "agency": "Wellcome Trust",
+              "grantId": "215899/Z/19/Z",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "grantId": "102163/B/13/Z",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "grantId": "217100/Z/19/Z",
+              "orderIn": 0
+            }
+          ]
+        }
+      },
+      {
+        "id": "40613419",
+        "source": "MED",
+        "pmid": "40613419",
+        "pmcid": "PMC12377712",
+        "doi": "10.1242/jcs.263826",
+        "title": "Transcriptional adaptation after deletion of Cdc42 in primary T cells.",
+        "pubYear": "2025",
+        "isOpenAccess": "Y",
+        "journalInfo": {
+          "journal": {
+            "title": "Journal of cell science"
+          }
+        },
+        "grantsList": {
+          "grant": [
+            {
+              "agency": "Wellcome Trust",
+              "acronym": "WT_",
+              "grantId": "217100",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "acronym": "WT_",
+              "orderIn": 0
+            },
+            {
+              "agency": "University of Cambridge",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "grantId": "217100/Z/19/Z",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "grantId": "102163/B/13/Z",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "acronym": "WT_",
+              "grantId": "220543",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "acronym": "WT_",
+              "grantId": "102163",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "grantId": "220543/Z/20/Z",
+              "orderIn": 0
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

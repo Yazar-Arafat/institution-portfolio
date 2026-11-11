@@ -1,0 +1,75 @@
+{
+  "_fixtureNote": "Test fixture in the Grist 'core' JSON format (field names and types follow archived real Grist responses, e.g. HitCount as a string). Grant IDs and funders are real, taken from articles' funding metadata; titles and dates are illustrative.",
+  "HitCount": "4",
+  "Request": {
+    "Query": "aff:\"University of Cambridge\"",
+    "ResultType": "Core",
+    "Page": "1"
+  },
+  "RecordList": {
+    "Record": [
+      {
+        "Grant": {
+          "Funder": {
+            "Name": "Wellcome Trust",
+            "pubMedSearchTerm": "Wellcome Trust",
+            "FundRefID": "https://doi.org/10.13039/100010269"
+          },
+          "Id": "217100/Z/19/Z",
+          "Title": "Illustrative Wellcome grant title",
+          "StartDate": "2019-10-01",
+          "EndDate": "2024-09-30",
+          "Amount": { "Currency": "GBP", "$": "1000000.0" }
+        },
+        "Institution": {
+          "Name": "University of Cambridge",
+          "RORID": "ror.org/013meh722"
+        }
+      },
+      {
+        "Grant": {
+          "Funder": {
+            "Name": "Medical Research Council",
+            "pubMedSearchTerm": "Medical Research Council",
+            "FundRefID": "https://doi.org/10.13039/501100000265"
+          },
+          "Id": "MR/P014178/1",
+          "Title": "Illustrative MRC grant title",
+          "StartDate": "2017-04-01",
+          "EndDate": "2022-03-31"
+        },
+        "Institution": {
+          "Name": "University of Cambridge",
+          "Department": "Department of Medicine",
+          "RORID": "ror.org/013meh722"
+        }
+      },
+      {
+        "Grant": {
+          "Funder": {
+            "Name": "Wellcome Trust",
+            "pubMedSearchTerm": "Wellcome Trust"
+          },
+          "Id": "12345",
+          "Title": "Illustrative grant whose short ID is also used by other funders"
+        },
+        "Institution": {
+          "Name": "University of Cambridge"
+        }
+      },
+      {
+        "Grant": {
+          "Funder": {
+            "Name": "British Heart Foundation",
+            "pubMedSearchTerm": "British Heart Foundation"
+          },
+          "Id": "FS/00/00000",
+          "Title": "Illustrative grant with no publications in Europe PMC"
+        },
+        "Institution": {
+          "Name": "University of Cambridge Clinical School"
+        }
+      }
+    ]
+  }
+}
