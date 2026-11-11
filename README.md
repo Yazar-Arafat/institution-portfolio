@@ -261,12 +261,36 @@ format (see below), but its titles and dates are illustrative.
 
 ## Review of my solution
 
-<!-- To be written in my own words. -->
-
 ### Which design decision worked particularly well?
+
+The decision that worked best was giving each grant its own publication status, so one failed lookup doesn't break
+the whole response. I chose it because Europe PMC is outside my control: the administrator should still get every
+result that worked, and a failed lookup must never look like "no publications found". It worked: when the real
+Articles API took 20 s or more during development, the service still returned HTTP 200 and marked only the slow
+grants `LOOKUP_FAILED`, with the reason.
 
 ### What would you change or improve with more time?
 
+First, I would return 503 when the service is overloaded. Today, under heavy load, publication lookups wait in a
+queue with no limit and then come back as `LOOKUP_FAILED`. I put this first because overload can make every request
+fail, while missed papers only affect some grants. Then I would find more of each grant's papers: a long ID like
+`217100/Z/19/Z` misses papers that cite only `217100`, and programme names like "DELTAS Africa" aren't mapped to
+their funder.
+
 ### Which assumption about Europe PMC data would you validate before production?
 
+My code assumes that the live Grants API returns JSON with the fields it expects. I could not test this: the Grants
+API was down during development, and the Wayback Machine has no copy of this exact format. If a field name were
+different, the institution or funder would silently come back empty. Before production, I would run real searches,
+for example for Cambridge and Manchester, and save a real response as a test fixture. I would also check that the
+funding information on articles is reliable enough to mark a link `VERIFIED`, by checking a sample of links by hand
+against each paper's acknowledgements.
+
 ### Which piece of technical debt did you deliberately accept?
+
+I accepted having no caching and no retries, because a cache needs extra decisions, such as how long results stay
+fresh and how much memory to use, which weren't worth making for a first version. The cost is that every request
+depends on Europe PMC's speed: when it is slow, some grants come back as `LOOKUP_FAILED`, and the same grants are
+looked up again on every request. I would fix it when Europe PMC's slowness causes many `LOOKUP_FAILED` results, by
+adding a short-lived cache for Articles results and one retry for timeouts, kept inside the limit of 4 parallel
+calls so retries don't overload Europe PMC.
