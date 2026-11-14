@@ -21,11 +21,16 @@ public final class InstitutionQuery {
     }
 
     public static String forName(String institutionName) {
+        return "aff:\"" + phrase(institutionName) + "\"";
+    }
+
+    /** The name as it is searched: reserved characters replaced with spaces, and whitespace collapsed. */
+    public static String phrase(String institutionName) {
         String withoutReserved = RESERVED.matcher(institutionName).replaceAll(" ");
         String phrase = WHITESPACE.matcher(withoutReserved).replaceAll(" ").strip();
         if (phrase.isEmpty()) {
             throw new IllegalArgumentException("Institution name has no searchable characters: " + institutionName);
         }
-        return "aff:\"" + phrase + "\"";
+        return phrase;
     }
 }

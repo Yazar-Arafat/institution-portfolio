@@ -1,0 +1,128 @@
+{
+  "_fixtureNote": "Trimmed from a live Grist response to aff:\"University of Manchester\" (resultType=core): Grist lists one record per investigator, so grant 352259 repeats with each investigator's institution. Investigator details and long fields are removed; record order is kept.",
+  "HitCount": "3265",
+  "Request": {
+    "Query": "aff:\"University of Manchester\"",
+    "ResultType": "Core",
+    "Page": "1"
+  },
+  "RecordList": {
+    "Record": [
+      {
+        "Grant": {
+          "Id": "352259",
+          "Title": "Early initiation of PerIpheral VasOpressors for sepsis Treatment in sub- Saharan Africa (PIVOT-Africa)",
+          "Funder": {
+            "Name": "Wellcome Trust",
+            "pubMedSearchTerm": "Wellcome Trust"
+          },
+          "StartDate": "2027-01-01",
+          "EndDate": "2028-12-31"
+        },
+        "Institution": {
+          "Name": "University of Bristol",
+          "RORID": "0524sp257",
+          "RorOfficialName": "University of Bristol"
+        }
+      },
+      {
+        "Grant": {
+          "Id": "352259",
+          "Title": "Early initiation of PerIpheral VasOpressors for sepsis Treatment in sub- Saharan Africa (PIVOT-Africa)",
+          "Funder": {
+            "Name": "Wellcome Trust",
+            "pubMedSearchTerm": "Wellcome Trust"
+          },
+          "StartDate": "2027-01-01",
+          "EndDate": "2028-12-31"
+        },
+        "Institution": {
+          "Name": "Liverpool School of Tropical Medicine",
+          "RORID": "03svjbs84",
+          "RorOfficialName": "Liverpool School of Tropical Medicine"
+        }
+      },
+      {
+        "Grant": {
+          "Id": "352259",
+          "Title": "Early initiation of PerIpheral VasOpressors for sepsis Treatment in sub- Saharan Africa (PIVOT-Africa)",
+          "Funder": {
+            "Name": "Wellcome Trust",
+            "pubMedSearchTerm": "Wellcome Trust"
+          },
+          "StartDate": "2027-01-01",
+          "EndDate": "2028-12-31"
+        },
+        "Institution": {
+          "Name": "Mulago National Referral Hospital"
+        }
+      },
+      {
+        "Grant": {
+          "Id": "352259",
+          "Title": "Early initiation of PerIpheral VasOpressors for sepsis Treatment in sub- Saharan Africa (PIVOT-Africa)",
+          "Funder": {
+            "Name": "Wellcome Trust",
+            "pubMedSearchTerm": "Wellcome Trust"
+          },
+          "StartDate": "2027-01-01",
+          "EndDate": "2028-12-31"
+        },
+        "Institution": {
+          "Name": "Malawi Liverpool Wellcome Programme"
+        }
+      },
+      {
+        "Grant": {
+          "Id": "352259",
+          "Title": "Early initiation of PerIpheral VasOpressors for sepsis Treatment in sub- Saharan Africa (PIVOT-Africa)",
+          "Funder": {
+            "Name": "Wellcome Trust",
+            "pubMedSearchTerm": "Wellcome Trust"
+          },
+          "StartDate": "2027-01-01",
+          "EndDate": "2028-12-31"
+        },
+        "Institution": {
+          "Name": "University of Manchester",
+          "RORID": "027m9bs27",
+          "RorOfficialName": "University of Manchester"
+        }
+      },
+      {
+        "Grant": {
+          "Id": "341725",
+          "Title": "Altered Ca2+ signalling underlying maternal microvascular dysfunction in pre eclampsia",
+          "Funder": {
+            "Name": "Wellcome Trust",
+            "pubMedSearchTerm": "Wellcome Trust"
+          },
+          "StartDate": "2026-10-28",
+          "EndDate": "2031-10-27"
+        },
+        "Institution": {
+          "Name": "University of Manchester",
+          "RORID": "027m9bs27",
+          "RorOfficialName": "University of Manchester"
+        }
+      },
+      {
+        "Grant": {
+          "Id": "ACEDAS-2026/100002",
+          "Title": "ACED PhD Programme - 2026/27 intake",
+          "Funder": {
+            "Name": "Cancer Research UK",
+            "pubMedSearchTerm": "Cancer Research UK"
+          },
+          "StartDate": "2026-10-01",
+          "EndDate": "2030-09-30"
+        },
+        "Institution": {
+          "Name": "University of Manchester",
+          "RORID": "027m9bs27",
+          "RorOfficialName": "University of Manchester"
+        }
+      }
+    ]
+  }
+}

@@ -49,20 +49,21 @@ than being silently capped.
 | 502 | The Grants API failed or returned something unreadable. |
 | 504 | The Grants API did not respond in time. |
 
-Example response to the first request above, abridged. The Grants API was down during development (see
-[Limitations](#limitations)), so the Grants fixture in `src/test/resources/fixtures` stood in for it. The publications
-are real, from the live Articles API.
+Example response to the first request above, abridged. It uses the Grants fixture in `src/test/resources/fixtures`,
+made while the Grants API was unavailable, so it shows `FOUND`, `UNCERTAIN` and `NONE_FOUND`. The publications are
+real, from the live Articles API. Live results for large universities are mostly `NONE_FOUND`: see
+[Limitations](#limitations).
 
 ```json
 {
   "institution": "University of Cambridge",
-  "grantSearch": { "query": "aff:\"University of Cambridge\"", "totalMatchingGrants": 4, "returnedGrants": 4 },
+  "grantSearch": { "query": "aff:\"University of Cambridge\"", "totalMatchingRecords": 4, "returnedGrants": 4 },
   "grants": [
     {
       "rank": 1,
       "grantId": "217100/Z/19/Z",
       "funder": "Wellcome Trust",
-      "institution": { "name": "University of Cambridge", "department": null, "rorId": "ror.org/013meh722" },
+      "institution": { "name": "University of Cambridge", "department": null, "rorId": "https://ror.org/013meh722" },
       "publications": {
         "status": "FOUND",
         "query": "GRANT_ID:\"217100/Z/19/Z\"",
@@ -108,7 +109,7 @@ are real, from the live Articles API.
     "uncertainAssociations": 3,
     "distinctPublications": 9,
     "matchedInstitutions": [
-      { "name": "University of Cambridge", "rorId": "ror.org/013meh722", "grants": 2 },
+      { "name": "University of Cambridge", "rorId": "https://ror.org/013meh722", "grants": 2 },
       { "name": "University of Cambridge", "rorId": null, "grants": 1 },
       { "name": "University of Cambridge Clinical School", "rorId": null, "grants": 1 }
     ]
@@ -122,7 +123,10 @@ are real, from the live Articles API.
 ### Response and identity
 
 - One entry per grant, in the Grants API's order, with its `rank`, ID, title, funder and reported institution
-  (name, department, ROR ID). Each grant has a `publications.status`:
+  (name, department, ROR ID). Grist returns one record per investigator, so a grant with several investigators
+  appears several times, each time with that person's institution. These records are merged into one entry, which
+  reports the institution matching the searched name, or the first one listed. Each grant has a
+  `publications.status`:
   - `FOUND`: at least one publication is verified.
   - `UNCERTAIN`: publications were found by grant ID, but none could be verified.
   - `NONE_FOUND`: no publications cite the grant ID.
@@ -131,8 +135,9 @@ are real, from the live Articles API.
   uncertainty.
 - A publication is identified by its Europe PMC `source` plus `id` (e.g. MED 42791267, PPR PPR1162769), which every
   record has. DOI, PMID and PMCID are included when present, plus a link to Europe PMC.
-- `grantSearch.totalMatchingGrants` is Grist's hit count for the query, and `summary` counts only what is returned.
-  Both are labelled so they are not read as institutional totals. `summary.matchedInstitutions` shows which
+- `grantSearch.totalMatchingRecords` is Grist's hit count. It counts one record per investigator (searching for the
+  single grant `gid:352259` gives 8), so it is not a number of grants. `summary` counts only what is returned. Both
+  are labelled so they are not read as institutional totals. `summary.matchedInstitutions` shows which
   institutions the name search actually matched.
 
 ### Institution matching
@@ -142,14 +147,18 @@ are real, from the live Articles API.
 - Grist takes its parameters in the URL **path** (`/rest/get/query=…&resultType=core&format=json`), not a query
   string. So `" \ & ; = / ? # %` and control characters are replaced with spaces, and the phrase is then
   percent-encoded as a path segment. User input cannot close the phrase, add search terms or break the URL. Search
-  indexes split words on punctuation, so this should not change what matches; names such as "Texas A&M" are worth
-  checking against the live API.
-- `resultType=core` is required, because only core results include institution details. One page (up to 25 grants) is
-  fetched, and the first `limit` grants are kept in Grist's order.
+  indexes split words on punctuation, so this does not change what matches: "Texas A&M University" is sent as
+  `Texas A M University` and still finds its grants.
+- `resultType=core` is required, because only core results include institution details. One page of 25 records is
+  fetched, as the brief allows, and the first `limit` distinct grants are kept in Grist's order. Because records are
+  per investigator, a page can hold far fewer than 25 grants (Cambridge's first page holds 5), so a response can
+  contain fewer grants than `limit`. Reading further pages until `limit` is reached would be the next step.
 - Limits of name matching:
   - `aff:` searches institution names *and departments*.
-  - It misses variants and abbreviations ("Cambridge University", "UCL").
+  - Different forms of a name give different results: "University College London" finds 8,308 records, "UCL"
+    only 229.
   - It can include other organisations whose names contain the phrase.
+  - A grant matches if any one of its investigators is at the institution, so it may be led from elsewhere.
   - It only covers awards from Europe PMC's participating funders.
 
   The ROR IDs in `matchedInstitutions` make these limits visible to the caller.
@@ -175,7 +184,8 @@ are real, from the live Articles API.
 - **Funder names differ between the APIs**, e.g. "UKRI | Medical Research Council", or "Wellcome" vs "Wellcome Trust".
   Names are compared after normalising case and punctuation, with compound agencies split on `|`, and one name may
   contain the other as whole words. This is lenient on purpose, since the grant ID must already match.
-  Grist's own `pubMedSearchTerm` for the funder is also accepted.
+  Grist's own `pubMedSearchTerm` for the funder is also accepted. UKRI counts as the funder of grants from its
+  councils (MRC, BBSRC, EPSRC and others), because articles often credit "UKRI" for, say, an MRC grant.
 - Filtering by funder inside the query was rejected: `GRANT_AGENCY:"MRC"` finds 0 articles for `MR/P014178/1`, where
   the full name finds 9.
 - **Deduplication** happens only within a grant, by `source` + `id`. It never happens across grants: one paper can
@@ -192,7 +202,8 @@ are real, from the live Articles API.
   includes time spent queued.
   - Most Articles searches take 1–2 s, but uncached searches with no hits were measured at about 13 s. A shorter read
     timeout would turn many genuine `NONE_FOUND` results into failures.
-  - Worst-case response time is therefore about 35 s: the grant search plus one lookup deadline.
+  - Worst-case response time is therefore about 38 s: 3 s to connect and 15 s to read for the grant search, plus
+    one 20 s lookup deadline.
 - **Failures:**
   - A lookup that fails or misses its deadline marks only its own grant `LOOKUP_FAILED`, with the reason; the other
     grants are returned normally.
@@ -225,38 +236,36 @@ src/main/java/io/github/yazar/portfolio
 
 ## Tests
 
-`./mvnw test` runs 39 tests without network access. On every push, GitHub Actions (`.github/workflows/ci.yml`)
+`./mvnw test` runs 51 tests without network access. On every push, GitHub Actions (`.github/workflows/ci.yml`)
 runs them, builds the Docker image, and checks that the container starts and rejects invalid input.
 
 | Test class | What it checks |
 |---|---|
 | `InstitutionQueryTest`, `ArticlesClientTest` | Query construction and URL encoding, including input that tries to break out of the phrase |
-| `GristResponseParserTest` | Grist JSON variants: a single record as an object, several funders or institutions listed as an array, a missing record list, missing fields, the older string form of `Funder` |
-| `AssociationVerifierTest` | `VERIFIED` vs `UNCERTAIN`, funder-name variants, IDs shared across funders, the longer cited form of bare IDs |
+| `GristResponseParserTest` | Grist JSON variants: a single record as an object, several funders or institutions listed as an array, ROR IDs given as links (missing or empty ones stay null), a missing record list, missing fields, the older string form of `Funder` |
+| `GrantRecordsTest` | Merging Grist's per-investigator records: one entry per grant in Grist's order, reporting the institution that matches the searched name |
+| `AssociationVerifierTest` | `VERIFIED` vs `UNCERTAIN`, funder-name variants, UKRI and its councils (but not for other funders, other grant IDs, or names that only start with "UKRI"), IDs shared across funders, the longer cited form of bare IDs |
 | `PortfolioServiceTest` | Results stay with their grant when lookups finish out of order; one failure is isolated; `NONE_FOUND` vs `LOOKUP_FAILED`; the concurrency cap; the lookup deadline, including that an expired queued lookup never calls Europe PMC; counts for a paper shared by two grants |
-| `InstitutionPortfolioApiTest` | The whole application over HTTP against WireMock standing in for Europe PMC: statuses, 400/502/504 (including a response that stalls halfway through its body), the exact Grist URL, the OpenAPI document |
+| `InstitutionPortfolioApiTest` | The whole application over HTTP against WireMock standing in for Europe PMC: statuses, 400/502/504 (including a response that stalls halfway through its body), the exact Grist URL, one publication lookup per grant when Grist repeats it, ROR IDs as links, an MRC grant credited to UKRI (and one article credited to an unrelated funder), the OpenAPI document |
 
-The Articles fixtures are real Europe PMC responses, recorded and trimmed. The Grants fixture follows Grist's real
-format (see below), but its titles and dates are illustrative.
+The Articles fixtures are real Europe PMC responses, recorded and trimmed. `grist-manchester-repeated.json` is a
+trimmed live Grist response, with investigator details removed. `grist-cambridge.json` follows Grist's real format,
+taken from its documentation and archived responses (Wayback Machine), but its titles and dates are illustrative.
 
 ## Limitations
 
-- **The Grants API was down during development.** Every request, including the examples in its own
-  documentation, got an empty reply.
-  - The Grist mapping is based on its documentation and on archived real responses from 2024–2025 (Wayback Machine).
-  - Those responses showed `HitCount` as a string, a historical change in the shape of `Funder`, and a malformed ID
-    ("107743Elliott"); the parser tolerates all three.
-  - The mapping has not been checked against a live response.
+- **Recent grants come first.** Grist lists grants newest first, so the first page holds awards that started
+  recently or have not started yet. Most show `NONE_FOUND`, because they have had no time to produce papers.
+- **Results are a sample, not a portfolio.** Only the first page of Grants results is read, so a response can hold
+  fewer grants than `limit`.
+- **`NONE_FOUND` does not prove a grant has no publications**, because funding metadata on articles is incomplete.
+- **Some linked publications are missed or stay `UNCERTAIN`.** A grant stored in the long form (`217100/Z/19/Z`)
+  does not find articles citing only `217100`, and papers that name only a funding programme ("DELTAS Africa
+  Initiative") instead of the funder stay `UNCERTAIN`.
 - **The Articles API is sometimes slow.** During development some searches took 20 s or more. A lookup that
   passes the 15 s read timeout shows as `LOOKUP_FAILED` ("did not respond in time"), while the other grants are
   still returned. Trying again later usually works.
-- **Not every form of a grant ID is searched.** A bare ID also finds its longer form, but a grant that Grist stores
-  in the long form (`217100/Z/19/Z`) does not find articles citing only the short form, and IDs such as
-  `MR/P014178/1` are matched exactly. Some linked publications are still missed.
-- **Funders are compared by name.** Papers that name only a funding programme, such as "DELTAS Africa Initiative"
-  for Wellcome money, stay `UNCERTAIN`. A mapping from programme to funder would fix this but is not built.
-- **`NONE_FOUND` does not prove a grant has no publications**, because funding metadata on articles is incomplete.
-- **Results are a sample, not a portfolio.** Only the first page of Grants results is used.
+- **No department.** The live Grants API has never sent a department, so `institution.department` is normally null.
 - **Not production-hardened:** no caching, no retries, and no rate limiting of this API's own callers.
 
 ## Review of my solution
@@ -279,12 +288,12 @@ their funder.
 
 ### Which assumption about Europe PMC data would you validate before production?
 
-My code assumes that the live Grants API returns JSON with the fields it expects. I could not test this: the Grants
-API was down during development, and the Wayback Machine has no copy of this exact format. If a field name were
-different, the institution or funder would silently come back empty. Before production, I would run real searches,
-for example for Cambridge and Manchester, and save a real response as a test fixture. I would also check that the
-funding information on articles is reliable enough to mark a link `VERIFIED`, by checking a sample of links by hand
-against each paper's acknowledgements.
+My code assumed that the Grants API returns one record per grant, with the fields it expects. The API was down for
+most of development, so I validated this once it was back, with real searches for Cambridge and Manchester. The
+fields were right, but Grist returns one record per investigator: Cambridge's first page of 25 records held only 5
+grants. I now merge the records by grant ID and keep a real response as a test fixture. Before production, I would
+still check that the funding information on articles is reliable enough to mark a link `VERIFIED`, by checking a
+sample of links by hand against each paper's acknowledgements.
 
 ### Which piece of technical debt did you deliberately accept?
 

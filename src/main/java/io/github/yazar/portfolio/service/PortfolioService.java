@@ -49,7 +49,9 @@ public class PortfolioService implements AutoCloseable {
     static final List<String> CAVEATS = List.of(
             "Grants come from the Europe PMC Grants API, which only covers awards from participating funders. "
                     + "They are matched on institution name, so name variants can be missed and similarly named "
-                    + "institutions included; check summary.matchedInstitutions.",
+                    + "institutions included; check summary.matchedInstitutions. Only the first page of Grants API "
+                    + "records is read, and it lists each grant once per investigator, so fewer grants than requested "
+                    + "may be returned.",
             "Publications are found by searching the Articles API for each grant ID. VERIFIED means the article's "
                     + "own funding metadata lists the grant ID (or its longer cited form) and funder; UNCERTAIN means "
                     + "that could not be confirmed.",

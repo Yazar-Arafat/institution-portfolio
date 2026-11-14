@@ -1,0 +1,230 @@
+{
+  "version": "6.9",
+  "hitCount": 89,
+  "request": {
+    "queryString": "GRANT_ID:\"MR/T030062/1\"",
+    "resultType": "core",
+    "cursorMark": "*",
+    "pageSize": 10,
+    "sort": "",
+    "synonym": false
+  },
+  "resultList": {
+    "result": [
+      {
+        "id": "PPR1237613",
+        "source": "PPR",
+        "doi": "10.64898/2026.05.21.726754",
+        "title": "Insertion sequence elements associated with  <i>Staphylococcus epidermidis</i>  evolution in persistent orthopaedic device-related infections",
+        "pubYear": "2026",
+        "bookOrReportDetails": {
+          "publisher": "bioRxiv"
+        },
+        "grantsList": {
+          "grant": [
+            {
+              "agency": "UKRI",
+              "grantId": "MR/L015080/1",
+              "orderIn": 0
+            },
+            {
+              "agency": "UKRI",
+              "grantId": "MR/S009264/1",
+              "orderIn": 0
+            },
+            {
+              "agency": "AO foundation",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "acronym": "WT",
+              "grantId": "088786/C/09/Z",
+              "orderIn": 0
+            },
+            {
+              "agency": "Ineos Oxford Institute",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "acronym": "WT",
+              "grantId": "310742/Z/24/Z",
+              "orderIn": 0
+            },
+            {
+              "agency": "UKRI",
+              "grantId": "MR/V001213/1",
+              "orderIn": 0
+            },
+            {
+              "agency": "Genpax",
+              "orderIn": 0
+            },
+            {
+              "agency": "UKRI",
+              "grantId": "MR/T030062/1",
+              "orderIn": 0
+            }
+          ]
+        }
+      },
+      {
+        "id": "PPR1242705",
+        "source": "PPR",
+        "doi": "10.64898/2026.05.29.728712",
+        "title": "Genetic context drives evolution of divergent antibiotic survival phenotypes in  <i>Staphylococcus epidermidis</i>",
+        "pubYear": "2026",
+        "bookOrReportDetails": {
+          "publisher": "bioRxiv"
+        },
+        "grantsList": {
+          "grant": [
+            {
+              "agency": "Wellcome Trust",
+              "acronym": "WT",
+              "grantId": "224212/Z/21/Z",
+              "orderIn": 0
+            },
+            {
+              "agency": "UK Research and Innovation",
+              "grantId": "MR/L015080/1",
+              "orderIn": 0
+            },
+            {
+              "agency": "UK Research and Innovation",
+              "grantId": "MR/V001213/1",
+              "orderIn": 0
+            },
+            {
+              "agency": "UK Research and Innovation",
+              "grantId": "UKRI905",
+              "orderIn": 0
+            },
+            {
+              "agency": "UK Research and Innovation",
+              "grantId": "MR/T030062/1",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "acronym": "WT",
+              "grantId": "088786/C/09/Z",
+              "orderIn": 0
+            },
+            {
+              "agency": "UK Research and Innovation",
+              "grantId": "MR/S009264/1",
+              "orderIn": 0
+            },
+            {
+              "agency": "Oxford Medical Sciences Fund",
+              "grantId": "0015060",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "acronym": "WT",
+              "grantId": "218205/Z/19/Z",
+              "orderIn": 0
+            }
+          ]
+        }
+      },
+      {
+        "id": "41408707",
+        "source": "MED",
+        "pmid": "41408707",
+        "pmcid": "PMC12815263",
+        "doi": "10.1093/ismejo/wraf267",
+        "title": "Everything is everywhere but Escherichia coli adapts to different niches.",
+        "pubYear": "2026",
+        "journalInfo": {
+          "journal": {
+            "title": "The ISME journal"
+          }
+        },
+        "grantsList": {
+          "grant": [
+            {
+              "agency": "Wellcome Trust",
+              "grantId": "088786/C/09/Z",
+              "orderIn": 0
+            },
+            {
+              "agency": "UKRI and Wellcome Trust",
+              "grantId": "MR/V001213/1",
+              "orderIn": 0
+            },
+            {
+              "agency": "UKRI and Wellcome Trust",
+              "grantId": "MR/S009264/1",
+              "orderIn": 0
+            },
+            {
+              "agency": "Departament de Recerca i Universitats de la Generalitat de Catalunya",
+              "grantId": "FI-SDUR 2020",
+              "orderIn": 0
+            },
+            {
+              "agency": "Wellcome Trust",
+              "acronym": "WT_",
+              "orderIn": 0
+            },
+            {
+              "agency": "UKRI and Wellcome Trust",
+              "grantId": "088786/C/09/Z",
+              "orderIn": 0
+            },
+            {
+              "agency": "UKRI and Wellcome Trust",
+              "grantId": "MR/T030062/1",
+              "orderIn": 0
+            },
+            {
+              "agency": "UKRI and Wellcome Trust",
+              "grantId": "310 742/Z/24/Z",
+              "orderIn": 0
+            },
+            {
+              "agency": "UKRI and Wellcome Trust",
+              "grantId": "MR/L015080/1",
+              "orderIn": 0
+            }
+          ]
+        }
+      },
+      {
+        "id": "PPR1039000",
+        "source": "PPR",
+        "doi": "10.1099/acmi.0.000993.v2",
+        "title": "Parapipe: A Pipeline for Parasite Next-Generation Sequencing Data Analysis Applied to Cryptosporidium",
+        "pubYear": "2025",
+        "bookOrReportDetails": {
+          "publisher": "Access Microbiology"
+        },
+        "grantsList": {
+          "grant": [
+            {
+              "agency": "Wellcome Trust",
+              "acronym": "WT",
+              "grantId": "215800/Z/19/Z",
+              "orderIn": 0
+            },
+            {
+              "agency": "Health and Care Research Wales",
+              "acronym": "HCRW_",
+              "grantId": "AF-24-10",
+              "orderIn": 0
+            },
+            {
+              "agency": "CLIMB",
+              "grantId": "MR/T030062/1",
+              "orderIn": 0
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

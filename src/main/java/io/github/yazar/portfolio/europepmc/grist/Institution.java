@@ -6,6 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record Institution(
         @Schema(example = "University of Cambridge") String name,
         String department,
-        @Schema(description = "Research Organization Registry ID, when Grist provides one",
-                example = "ror.org/013meh722") String rorId) {
+        @Schema(description = "Research Organization Registry ID as a link, when Grist provides one",
+                example = "https://ror.org/013meh722") String rorId) {
 }

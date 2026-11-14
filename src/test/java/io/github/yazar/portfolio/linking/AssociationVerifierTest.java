@@ -35,6 +35,41 @@ class AssociationVerifierTest {
     }
 
     @Test
+    void verifiesACouncilGrantThatTheArticleCreditsToUkri() {
+        Grant mrcGrant = grant("MR/T030062/1", "Medical Research Council");
+
+        for (String agency : List.of("UKRI", "UK Research and Innovation", "UKRI and Wellcome Trust")) {
+            assertThat(AssociationVerifier.assess(mrcGrant, article(new FundingReference("MR/T030062/1", agency)))
+                    .association()).as(agency).isEqualTo(Association.VERIFIED);
+        }
+    }
+
+    @Test
+    void doesNotTreatUkriAsTheFunderOfAGrantFromOutsideUkri() {
+        Assessment assessment = AssociationVerifier.assess(grant("12345", "Wellcome Trust"),
+                article(new FundingReference("12345", "UKRI")));
+
+        assertThat(assessment.association()).isEqualTo(Association.UNCERTAIN);
+    }
+
+    @Test
+    void doesNotLetUkriStandInForADifferentGrantId() {
+        Assessment assessment = AssociationVerifier.assess(grant("MR/T030062/1", "Medical Research Council"),
+                article(new FundingReference("MR/X000000/1", "UKRI")));
+
+        assertThat(assessment.association()).isEqualTo(Association.UNCERTAIN);
+        assertThat(assessment.note()).contains("does not list grant ID MR/T030062/1");
+    }
+
+    @Test
+    void recognisesUkriOnlyAsAWholeWord() {
+        Assessment assessment = AssociationVerifier.assess(grant("MR/T030062/1", "Medical Research Council"),
+                article(new FundingReference("MR/T030062/1", "Ukrinform Media Fund")));
+
+        assertThat(assessment.association()).isEqualTo(Association.UNCERTAIN);
+    }
+
+    @Test
     void isUncertainWhenTheSameIdBelongsToAnotherFunder() {
         Grant grant = grant("12345", "Wellcome Trust");
 

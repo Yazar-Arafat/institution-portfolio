@@ -5,6 +5,7 @@ import io.github.yazar.portfolio.europepmc.EuropePmcRequest;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClient;
@@ -31,12 +32,17 @@ public class GristClient {
         this.readTimeout = properties.readTimeout();
     }
 
-    /** Returns the first results page (up to 25 grants) whose affiliation matches the name, in Grist's order. */
+    /**
+     * Returns the distinct grants on the first results page whose affiliation matches the name, in Grist's order.
+     * A page holds 25 records, one per investigator, so it can hold far fewer than 25 grants.
+     */
     public GrantSearchResult findGrantsByInstitution(String institutionName) {
         String query = InstitutionQuery.forName(institutionName);
         JsonNode body = EuropePmcRequest.send(API_NAME, readTimeout,
                 () -> restClient.get().uri(searchUri(baseUrl, query)).retrieve().body(JsonNode.class));
-        return GristResponseParser.parse(query, body);
+        GrantSearchResult page = GristResponseParser.parse(query, body);
+        List<Grant> grants = GrantRecords.mergeByGrantId(page.grants(), InstitutionQuery.phrase(institutionName));
+        return new GrantSearchResult(query, page.totalHits(), grants);
     }
 
     /**

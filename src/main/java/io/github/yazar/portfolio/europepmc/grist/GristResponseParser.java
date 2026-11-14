@@ -3,6 +3,7 @@ package io.github.yazar.portfolio.europepmc.grist;
 import io.github.yazar.portfolio.europepmc.EuropePmcException;
 import io.github.yazar.portfolio.europepmc.EuropePmcException.Failure;
 import java.util.List;
+import java.util.regex.Pattern;
 import tools.jackson.databind.JsonNode;
 
 /**
@@ -11,6 +12,8 @@ import tools.jackson.databind.JsonNode;
  * binding to a strict schema. Missing fields become null, and a missing record list means no grants.
  */
 final class GristResponseParser {
+
+    private static final Pattern ROR_PREFIX = Pattern.compile("^(https?://)?ror\\.org/", Pattern.CASE_INSENSITIVE);
 
     private GristResponseParser() {
     }
@@ -49,7 +52,7 @@ final class GristResponseParser {
                 new Institution(
                         text(institution.path("Name")),
                         text(institution.path("Department")),
-                        text(institution.path("RORID"))),
+                        rorLink(text(institution.path("RORID")))),
                 text(grant.path("StartDate")),
                 text(grant.path("EndDate")));
     }
@@ -60,6 +63,18 @@ final class GristResponseParser {
      */
     private static JsonNode first(JsonNode node) {
         return node.isArray() ? node.path(0) : node;
+    }
+
+    /**
+     * A ROR ID as a full link, the form ROR recommends. Live Grist sends the bare ID ("01d5qpn59"); older
+     * responses sent "ror.org/013meh722".
+     */
+    private static String rorLink(String rorId) {
+        if (rorId == null) {
+            return null;
+        }
+        String id = ROR_PREFIX.matcher(rorId).replaceFirst("");
+        return id.isEmpty() ? null : "https://ror.org/" + id;
     }
 
     /** The node's text, or null if it is missing, null, blank or not a single value. */

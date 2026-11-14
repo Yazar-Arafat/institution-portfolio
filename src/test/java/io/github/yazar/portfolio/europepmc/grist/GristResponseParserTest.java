@@ -29,7 +29,8 @@ class GristResponseParserTest {
         assertThat(mrcGrant.funder()).isEqualTo("Medical Research Council");
         assertThat(mrcGrant.funderSearchTerm()).isEqualTo("Medical Research Council");
         assertThat(mrcGrant.institution())
-                .isEqualTo(new Institution("University of Cambridge", "Department of Medicine", "ror.org/013meh722"));
+                .isEqualTo(new Institution("University of Cambridge", "Department of Medicine",
+                        "https://ror.org/013meh722"));
         assertThat(mrcGrant.startDate()).isEqualTo("2017-04-01");
     }
 
@@ -60,7 +61,33 @@ class GristResponseParserTest {
         Grant grant = result.grants().getFirst();
         assertThat(grant.funder()).isEqualTo("Wellcome Trust");
         assertThat(grant.institution())
-                .isEqualTo(new Institution("University College London", null, "ror.org/02jx3x895"));
+                .isEqualTo(new Institution("University College London", null, "https://ror.org/02jx3x895"));
+    }
+
+    @Test
+    void givesRorIdsAsFullLinksWhicheverFormGristSends() {
+        GrantSearchResult result = parse("""
+                {"RecordList": {"Record": [
+                    {"Grant": {"Id": "1"}, "Institution": {"Name": "Babraham Institute", "RORID": "01d5qpn59"}},
+                    {"Grant": {"Id": "2"}, "Institution": {"Name": "University of Cambridge", "RORID": "ror.org/013meh722"}},
+                    {"Grant": {"Id": "3"}, "Institution": {"Name": "University of Manchester",
+                                                           "RORID": "https://ror.org/027m9bs27"}}]}}
+                """);
+
+        assertThat(result.grants()).extracting(grant -> grant.institution().rorId()).containsExactly(
+                "https://ror.org/01d5qpn59", "https://ror.org/013meh722", "https://ror.org/027m9bs27");
+    }
+
+    @Test
+    void leavesAMissingOrEmptyRorIdNull() {
+        GrantSearchResult result = parse("""
+                {"RecordList": {"Record": [
+                    {"Grant": {"Id": "1"}, "Institution": {"Name": "Mulago National Referral Hospital"}},
+                    {"Grant": {"Id": "2"}, "Institution": {"Name": "Blank RORID", "RORID": ""}},
+                    {"Grant": {"Id": "3"}, "Institution": {"Name": "Prefix only", "RORID": "ror.org/"}}]}}
+                """);
+
+        assertThat(result.grants()).extracting(grant -> grant.institution().rorId()).containsOnlyNulls();
     }
 
     @Test

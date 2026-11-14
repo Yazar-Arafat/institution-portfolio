@@ -19,9 +19,11 @@ public record InstitutionPortfolio(
     public record GrantSearch(
             @Schema(description = "Query sent to the Grants API", example = "aff:\"University of Cambridge\"")
             String query,
-            @Schema(description = "Grants API records matching the query, which is not the institution's complete portfolio")
-            Integer totalMatchingGrants,
-            @Schema(description = "Grants included in this response")
+            @Schema(description = "Grants API records matching the query. Grist returns one record per investigator, "
+                    + "so a grant is counted once for each of its investigators; this is not a count of grants.")
+            Integer totalMatchingRecords,
+            @Schema(description = "Distinct grants in this response. Can be fewer than limit, because only the first "
+                    + "page of Grants API records is read.")
             int returnedGrants) {
     }
 

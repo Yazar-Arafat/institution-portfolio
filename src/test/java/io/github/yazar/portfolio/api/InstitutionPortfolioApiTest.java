@@ -19,6 +19,7 @@ import io.github.yazar.portfolio.europepmc.articles.ArticlesClient;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -90,8 +91,56 @@ class InstitutionPortfolioApiTest {
         assertThat(result).bodyJson().extractingPath("$.grants[2].publications.items[*].association").asArray()
                 .containsOnly("UNCERTAIN");
         assertThat(result).bodyJson().extractingPath("$.summary.grantsByPublicationStatus.FOUND").isEqualTo(2);
+        assertThat(result).bodyJson().extractingPath("$.grants[0].institution.rorId")
+                .isEqualTo("https://ror.org/013meh722");
+        assertThat(result).bodyJson().extractingPath("$.grants[3].institution.rorId").isNull();
         europePmc.verify(getRequestedFor(urlEqualTo(
                 "/grist/rest/get/query=aff:%22University%20of%20Cambridge%22&resultType=core&format=json")));
+    }
+
+    @Test
+    void mergesTheRecordsGristRepeatsForEachInvestigatorAndLooksUpEachGrantOnce() {
+        stubGrist(okJson(fixture("grist-manchester-repeated.json")));
+        for (String grantId : List.of("352259", "341725", "ACEDAS-2026/100002")) {
+            stubArticles(grantId, okJson(fixture("articles-no-results.json")));
+        }
+
+        MvcTestResult result = requestPortfolio("University of Manchester");
+
+        assertThat(result).hasStatusOk();
+        assertThat(result).bodyJson().extractingPath("$.grants[*].grantId").asArray()
+                .containsExactly("352259", "341725", "ACEDAS-2026/100002");
+        assertThat(result).bodyJson().extractingPath("$.grants[0].institution.name")
+                .isEqualTo("University of Manchester");
+        assertThat(result).bodyJson().extractingPath("$.grantSearch.totalMatchingRecords").isEqualTo(3265);
+        assertThat(result).bodyJson().extractingPath("$.summary.grantsByFunder['Wellcome Trust']").isEqualTo(2);
+        europePmc.verify(1, getRequestedFor(urlPathEqualTo("/articles/search"))
+                .withQueryParam("query", equalTo(ArticlesClient.queryFor("352259"))));
+    }
+
+    @Test
+    void verifiesAnMrcGrantThatArticlesCreditToUkriButNotToAnUnrelatedFunder() {
+        stubGrist(okJson("""
+                {"HitCount": "1", "RecordList": {"Record": {
+                    "Grant": {"Id": "MR/T030062/1", "Funder": {"Name": "Medical Research Council"}},
+                    "Institution": {"Name": "Quadram Institute", "RORID": "04td3ys19"}}}}
+                """));
+        stubArticles("MR/T030062/1", okJson(fixture("articles-ukri-mr-t030062.json")));
+
+        MvcTestResult result = mvc.get().uri("/institution-portfolio")
+                .param("institution", "Quadram Institute")
+                .param("publicationsPerGrant", "5")
+                .exchange();
+
+        assertThat(result).hasStatusOk();
+        assertThat(result).bodyJson().extractingPath("$.grants[0].publications.status").isEqualTo("FOUND");
+        // Credited to "UKRI", "UK Research and Innovation", "UKRI and Wellcome Trust", then "CLIMB".
+        assertThat(result).bodyJson().extractingPath("$.grants[0].publications.items[*].association").asArray()
+                .containsExactly("VERIFIED", "VERIFIED", "VERIFIED", "UNCERTAIN");
+        assertThat(result).bodyJson().extractingPath("$.grants[0].publications.items[3].associationNote")
+                .isEqualTo("The article attributes grant ID MR/T030062/1 to CLIMB, not Medical Research Council.");
+        assertThat(result).bodyJson().extractingPath("$.grants[0].institution.rorId")
+                .isEqualTo("https://ror.org/04td3ys19");
     }
 
     @Test

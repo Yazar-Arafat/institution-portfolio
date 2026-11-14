@@ -170,7 +170,7 @@ class PortfolioServiceTest {
         InstitutionPortfolio portfolio = service.buildPortfolio(INSTITUTION, 2, 3);
 
         assertThat(portfolio.grants()).extracting(GrantEntry::grantId).containsExactly("A", "B");
-        assertThat(portfolio.grantSearch().totalMatchingGrants()).isEqualTo(100);
+        assertThat(portfolio.grantSearch().totalMatchingRecords()).isEqualTo(100);
         assertThat(portfolio.grantSearch().returnedGrants()).isEqualTo(2);
         PortfolioSummary summary = portfolio.summary();
         assertThat(summary.publicationAssociations()).isEqualTo(3);
@@ -182,7 +182,7 @@ class PortfolioServiceTest {
     private void givenGrants(String... grantIds) {
         List<Grant> grants = Arrays.stream(grantIds)
                 .map(id -> new Grant(id, "Grant " + id, FUNDER, FUNDER,
-                        new Institution(INSTITUTION, null, "ror.org/013meh722"), null, null))
+                        new Institution(INSTITUTION, null, "https://ror.org/013meh722"), null, null))
                 .toList();
         when(grist.findGrantsByInstitution(INSTITUTION))
                 .thenReturn(new GrantSearchResult("aff:\"" + INSTITUTION + "\"", 100, grants));
